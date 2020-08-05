@@ -43,6 +43,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AShooterCharacter::JumpPressed);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Released, this, &AShooterCharacter::JumpReleased);
+	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Released, this, &AShooterCharacter::ShootGun);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue)
@@ -73,5 +74,10 @@ void AShooterCharacter::JumpPressed()
 void AShooterCharacter::JumpReleased()
 {
 
+}
+
+void AShooterCharacter::ShootGun()
+{
+	Gun->PullTrigger();
 }
 

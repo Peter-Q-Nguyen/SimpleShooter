@@ -24,6 +24,11 @@ void AGun::BeginPlay()
 	
 }
 
+void AGun::PullTrigger()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Trigger Pulled"))
+}
+
 // Called every frame
 void AGun::Tick(float DeltaTime)
 {

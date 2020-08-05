@@ -32,6 +32,7 @@ private:
 	void LookRightRate(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
+	void ShootGun();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 70.f;

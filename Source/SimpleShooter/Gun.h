@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
+	void PullTrigger();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 protected:
