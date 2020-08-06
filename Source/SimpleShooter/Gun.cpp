@@ -3,7 +3,9 @@
 
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/World.h"
 // Sets default values
 AGun::AGun()
 {
@@ -26,7 +28,38 @@ void AGun::BeginPlay()
 
 void AGun::PullTrigger()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Trigger Pulled"))
+	//UE_LOG(LogTemp, Warning, TEXT("Trigger Pulled"))
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, GunMesh, TEXT("MuzzleFlashSocket"));
+
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+
+	if (!OwnerPawn)return;
+		AController * OwnerController = OwnerPawn->GetController();
+	if (!OwnerController) return;
+		
+	FVector Location;
+	FRotator Rotation;
+	OwnerController->GetPlayerViewPoint(Location, Rotation);
+
+	FVector End = Location + Rotation.Vector() * MaxRange;
+	//TODO Line Trace;
+
+
+	
+	FHitResult HitResult;
+	
+	bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1);
+
+	if (IsHit)
+	{
+		//DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 20, FColor::Red, true);
+		FVector ShotDirection = -Rotation.Vector();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ImpactEffect, HitResult.Location, ShotDirection.Rotation());
+	}
+
+//	DrawDebugCamera(GetWorld(), Location, Rotation, 90, 2, FColor::Green, true);
+//	DrawDebugCamera(GetWorld(), GetActorLocation(), GetActorRotation(), 90, 2, FColor::Red, true);
+
 }
 
 // Called every frame
