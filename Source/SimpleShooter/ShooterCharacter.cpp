@@ -57,9 +57,14 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	Health -= DamageToApply;
 
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f "), Health);
-	
+
 	return DamageToApply;
 
+}
+
+bool AShooterCharacter::IsDead() const
+{
+	return (Health <= 0);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue)
