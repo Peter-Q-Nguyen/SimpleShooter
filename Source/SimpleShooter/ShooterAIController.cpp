@@ -7,25 +7,30 @@
 void AShooterAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	SetFocus(PlayerPawn);
-	MoveToActor(PlayerPawn,300);
+	//APawn * PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	//SetFocus(PlayerPawn);
+	//MoveToActor(PlayerPawn,300);
+
+	if (AIBehavior != nullptr)
+	{
+		RunBehaviorTree(AIBehavior);
+	}
 }
 
 void AShooterAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if (LineOfSightTo(PlayerPawn))
-	{
-		SetFocus(PlayerPawn);
-		MoveToActor(PlayerPawn, 300);
-	}
-	else
-	{
-		ClearFocus(EAIFocusPriority::Gameplay);
-		StopMovement();
+	//APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	//if (LineOfSightTo(PlayerPawn))
+	//{
+	//	SetFocus(PlayerPawn);
+	//	MoveToActor(PlayerPawn, 300);
+	//}
+	//else
+	//{
+	//	ClearFocus(EAIFocusPriority::Gameplay);
+	//	StopMovement();
 
-	}
+	//}
 }

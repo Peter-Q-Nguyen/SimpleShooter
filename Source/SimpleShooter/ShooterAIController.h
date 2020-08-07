@@ -20,4 +20,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UBehaviorTree* AIBehavior;
+
 };
