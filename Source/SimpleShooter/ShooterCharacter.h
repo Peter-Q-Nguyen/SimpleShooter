@@ -27,6 +27,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	void ShootGun();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,7 +40,7 @@ private:
 	void LookRightRate(float AxisValue);
 	void JumpPressed();
 	void JumpReleased();
-	void ShootGun();
+
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 10.f;
