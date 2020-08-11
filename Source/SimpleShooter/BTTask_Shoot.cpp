@@ -3,7 +3,7 @@
 
 #include "BTTask_Shoot.h"
 #include "ShooterCharacter.h"
-#include "ShooterAIController.h"
+#include "AIController.h"
 
 UBTTask_Shoot::UBTTask_Shoot()
 {
