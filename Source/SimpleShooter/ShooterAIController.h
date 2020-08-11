@@ -23,4 +23,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UBehaviorTree* AIBehavior;
 
+
+
 };
