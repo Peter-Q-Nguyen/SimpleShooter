@@ -28,7 +28,7 @@ void AGun::BeginPlay()
 
 void AGun::PullTrigger()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Trigger Pulled"))
+
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, GunMesh, TEXT("MuzzleFlashSocket"));
 
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
@@ -42,13 +42,14 @@ void AGun::PullTrigger()
 	OwnerController->GetPlayerViewPoint(Location, Rotation);
 
 	FVector End = Location + Rotation.Vector() * MaxRange;
-	//TODO Line Trace;
 
-
-	
 	FHitResult HitResult;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
 	
-	bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1);
+	bool IsHit = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 
 	if (IsHit)
 	{
