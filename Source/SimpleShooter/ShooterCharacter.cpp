@@ -111,6 +111,14 @@ void AShooterCharacter::JumpReleased()
 
 }
 
+float AShooterCharacter::GetHealthPercent() const
+{
+//	float percent = (1 / MaxHealth) * Health;
+//	return FMath::Clamp(percent, 0.f, 1.f);
+
+	return Health / MaxHealth;
+}
+
 void AShooterCharacter::ShootGun()
 {
 	Gun->PullTrigger();
