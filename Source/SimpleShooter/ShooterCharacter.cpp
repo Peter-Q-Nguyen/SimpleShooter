@@ -18,13 +18,28 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-	Gun->SetOwner(this);
+	//Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	//Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	//Gun->SetOwner(this);
+
+	for (TSubclassOf<AGun> GunClass : GunClasses)
+	{
+		AGun* Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+		Gun->SetOwner(this);
+		GunArray.Push(Gun);
+	}
+
+	if (GunArray.Num() > 0)
+	{
+		SetGun(GunIndex);
+	}
 	Health = MaxHealth;
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f "), Health);
+
 }
+
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
@@ -48,6 +63,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AShooterCharacter::JumpPressed);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Released, this, &AShooterCharacter::JumpReleased);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Released, this, &AShooterCharacter::ShootGun);
+
+	PlayerInputComponent->BindAction(TEXT("WeaponSwapUp"), EInputEvent::IE_Released, this, &AShooterCharacter::WeaponSwapUp);
+	PlayerInputComponent->BindAction(TEXT("WeaponSwapDown"), EInputEvent::IE_Released, this, &AShooterCharacter::WeaponSwapDown);
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -62,7 +80,6 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 	if (IsDead())
 	{
-
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		ASimpleShooterGameModeBase * GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameModeBase>();
 		if (GameMode != nullptr)
@@ -73,6 +90,36 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	}
 
 	return DamageToApply;
+
+}
+
+void AShooterCharacter::SetGun(int32 Index)
+{
+	GunIndex = Index;
+	if (GunIndex < 0 || GunIndex >= GunArray.Num())
+	{
+		GunIndex = 0;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Setting Gun to %i"), GunIndex);
+
+	int Count = 0;
+	for (AGun* Gun : GunArray)
+	{
+		if (Count == GunIndex)
+		{
+			//		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+			Gun->SetActorHiddenInGame(false);
+			CurrentGun = Gun;
+		}
+		else
+		{
+			Gun->SetActorHiddenInGame(true);
+
+		}
+		
+		Count++;
+	}
 
 }
 
@@ -111,6 +158,26 @@ void AShooterCharacter::JumpReleased()
 
 }
 
+void AShooterCharacter::WeaponSwapUp()
+{
+	GunIndex++;
+	if (GunIndex >= GunClasses.Num())
+	{
+		GunIndex = 0;
+	}
+	SetGun(GunIndex);
+}
+
+
+void AShooterCharacter::WeaponSwapDown()
+{
+	GunIndex--;
+	if (GunIndex < 0)
+		GunIndex = GunArray.Num() - 1;
+	SetGun(GunIndex);
+}
+
+
 float AShooterCharacter::GetHealthPercent() const
 {
 //	float percent = (1 / MaxHealth) * Health;
@@ -121,6 +188,6 @@ float AShooterCharacter::GetHealthPercent() const
 
 void AShooterCharacter::ShootGun()
 {
-	Gun->PullTrigger();
+	CurrentGun->PullTrigger();
 }
 

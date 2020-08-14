@@ -44,6 +44,10 @@ private:
 	void JumpPressed();
 	void JumpReleased();
 
+	void WeaponSwapUp();
+	void WeaponSwapDown();
+
+	void SetGun(int32 Index);
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 10.f;
@@ -55,9 +59,15 @@ private:
 	float Health;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AGun> GunClass;
+	TArray < TSubclassOf<AGun>> GunClasses;
 
-	UPROPERTY()
-	AGun* Gun;
+	UPROPERTY(VisibleAnywhere)
+	AGun* CurrentGun;
+
+	//UPROPERTY(EditDefaultsOnly)
+	TArray<AGun*>GunArray;
+	UPROPERTY(VisibleAnywhere)
+	int32 GunIndex = 0;
+
 
 };
