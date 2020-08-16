@@ -31,6 +31,12 @@ public:
 	float GetHealthPercent() const;
 
 	void ShootGun();
+	UFUNCTION(BlueprintPure)
+	int32 GetAmmo();
+
+	void IncrementAmmo(int32 Ammo);
+
+	bool HasMaxAmmo();
 
 protected:
 	// Called when the game starts or when spawned

@@ -29,9 +29,16 @@ void AGun::BeginPlay()
 
 void AGun::PullTrigger()
 {
+	if (CurrentAmmo == 0)
+		return;
+	CurrentAmmo--;
+
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, GunMesh, TEXT("MuzzleFlashSocket"));
 	UGameplayStatics::SpawnSoundAttached(MuzzleSound, GunMesh, TEXT("MuzzleFlashSocket"));
 	
+
+
+
 	FHitResult HitResult;
 	FVector ShotDirection;
 	if (GunTrace(HitResult, ShotDirection))
@@ -60,6 +67,12 @@ void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGun::IncrementAmmo(int32 IncrementAmount)
+{
+	CurrentAmmo = FMath::Clamp(CurrentAmmo + IncrementAmount, 0, MaxAmmo);
+	
 }
 
 bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)

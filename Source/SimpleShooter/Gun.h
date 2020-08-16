@@ -19,6 +19,11 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void IncrementAmmo(int32 IncrementAmount);
+	int32 GetAmmo() { return CurrentAmmo; }
+
+	bool HasMaxAmmo() { return CurrentAmmo == MaxAmmo; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,6 +52,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
+
+	UPROPERTY(EditAnywhere)
+	int32 CurrentAmmo = 5;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxAmmo = 5;
 
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 	AController* GetOwnerController() const;

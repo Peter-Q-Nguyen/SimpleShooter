@@ -188,6 +188,29 @@ float AShooterCharacter::GetHealthPercent() const
 
 void AShooterCharacter::ShootGun()
 {
-	CurrentGun->PullTrigger();
+	if (CurrentGun != nullptr)
+		CurrentGun->PullTrigger();
 }
 
+int32 AShooterCharacter::GetAmmo()
+{
+	if (CurrentGun != nullptr)
+		return CurrentGun->GetAmmo();
+	else
+		return 0;
+}
+
+
+void AShooterCharacter::IncrementAmmo(int32 Ammo)
+{
+	if (CurrentGun != nullptr)
+	CurrentGun->IncrementAmmo(Ammo);
+}
+
+bool AShooterCharacter::HasMaxAmmo()
+{
+	if (CurrentGun != nullptr)
+		return CurrentGun->HasMaxAmmo();
+	else
+		return true;
+}
